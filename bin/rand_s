@@ -1,0 +1,36 @@
+#!/usr/bin/env rc
+
+# скрипт возвращает строку указанной длины с произвольным содержанием.
+# Например:
+# % mkdir f-`{rand_s 4}
+# % ls
+# f-Gokq
+
+. 9.rc
+
+
+if (~ $#* 0) {
+	echo "Ошибка: отсутствует аргумент." >[1=2]
+	exit 1
+}
+
+if (! test $1 -ge 0) {
+	echo "Ошибка: аргумент '$1' не является числом." >[1=2]
+	exit 1
+}
+
+
+resultStr=('')
+
+for (i in `{ seq $1 }) {
+	str=''
+	while (! ~ $str ?) {
+		str=`{
+			dd -if /dev/urandom -bs 1 -count 1 -quiet 1 |
+			tr -dc A-Za-z0-9
+		}
+	}
+	resultStr=($resultStr $str)
+}
+
+echo -n $resultStr | tr -d ' '

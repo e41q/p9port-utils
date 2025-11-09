@@ -1,0 +1,33 @@
+#!/usr/bin/env rc
+
+TERM=dumb
+PAGER=nobs
+MANPAGER=nobs
+# To use a given shell (not the user's default) in win, set the SHELL environment variable
+SHELL=9rc
+# To use a given shell for button 2 execution, set the acmeshell environment variable
+acmeshell=9rc
+
+# Run only a single instance of plumber
+if (! 9p stat plumb >[2]/dev/null >[1=2]) {
+	echo 'Запускаем plumber'
+	plumber
+}
+
+# font=/mnt/font/PTSans-Regular/14a/font,/mnt/font/PTSans-Regular/28a/font
+# Font=/mnt/font/PTMono-Regular/14a/font,/mnt/font/PTMono-Regular/28a/font
+
+font=/mnt/font/LucidaGrande/14a/font,/mnt/font/LucidaGrande/28a/font
+Font=/mnt/font/Menlo-Regular/14a/font,/mnt/font/Menlo-Regular/28a/font
+
+tabstop=4
+
+# acme_instances_count=`{pgrep acme | wc -l | sed 's/ *//'};
+# NAMESPACE=`{9 namespace}^_acme^`{expr $acme_instances_count + 1}
+
+NAMESPACE=`{mktemp -d}
+echo "NAMESPACE IS $NAMESPACE"
+
+
+
+exec acme -a -f $font -F $Font $*
